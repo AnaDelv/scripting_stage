@@ -11,8 +11,8 @@ $db = connect(
 );
 
 if(isset($_POST['addinfo'])) {
-    $title = htmlentities(trim($_POST['title']));
-    $text = htmlentities(trim($_POST['text']));
+    $title = htmlentities(addslashes(trim($_POST['title'])));
+    $text = htmlentities(addslashes(trim($_POST['text'])));
     $date = time();
 
 

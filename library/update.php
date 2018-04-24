@@ -33,11 +33,11 @@ if (isset($_POST['edit'])){
             header('Location: ../admin/users.php?status=edit');
 
         } else {
-            header('Location: ../admin/edit.php?id='.$id.'&status=wrong');
+            header('Location: ../admin/edit_user.php?id='.$id.'&status=wrong');
         }
 
     } else if ($_POST['password'] || $_POST['repeatpassword']){
-        header('Location: ../admin/edit.php?id='.$id.'&status=wrong');
+        header('Location: ../admin/edit_user.php?id='.$id.'&status=wrong');
 
     } else if ($lastname || $firstname || $username || $email || $class) {
 
@@ -50,7 +50,7 @@ if (isset($_POST['edit'])){
 
         if ($row > 0) {
 
-            header('Location: ../admin/edit.php?id='.$id.'&status=user');
+            header('Location: ../admin/edit_user.php?id='.$id.'&status=user');
         } else {
 
 
