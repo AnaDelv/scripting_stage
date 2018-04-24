@@ -7,6 +7,13 @@ require_once 'library/functions.php';
 if(!isLoggedIn()) {
     header('Location: ../login.php?status=err');
 }
+
+$db = connect(
+    DB_HOST,
+    DB_NAME,
+    DB_USER,
+    DB_PWD
+);
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -60,6 +67,26 @@ if(!empty($_GET['status'])){
 if(!empty($statusMsg)){
 echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
 }?>
+
+<div class="slider">
+    <div class="slides">
+
+        <?php
+        //on recupere les 5 dernieres news
+        $retour= $db->prepare('SELECT * FROM `news` ORDER BY id DESC LIMIT 0, 3');
+        $retour->execute();
+
+        while($donnees=$retour->fetch()){?>
+            <div class="slide">
+                <span><?php echo date('d/m/Y', $donnees['date']).' -- INFOS : ';?></span>
+                <?php $contenu =nl2br(stripslashes($donnees['text']));
+                echo  $contenu;
+                ?>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+
 <div class="carousel-inner form">
     <div class="item active carSize">
         <div class="carousel-content" id="googlesearch"><!------------SLIDE GOOGLE----------------->
@@ -71,3 +98,6 @@ echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
             </form>
         </div>
     </div>
+</div>
+
+

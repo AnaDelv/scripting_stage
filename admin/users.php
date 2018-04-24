@@ -39,11 +39,15 @@ if(!empty($_GET['status'])){
             $statusMsgClass = 'alert-success';
             $statusMsg = 'Les données ont bien été supprimées.';
             break;
+
         case 'errdel':
             $statusMsgClass = 'alert-danger';
             $statusMsg = 'Une erreur est survenue.';
             break;
-
+        case 'invalid':
+            $statusMsgClass = 'alert-danger';
+            $statusMsg = "Merci d'envoyer un fichier au format CSV";
+            break;
         default:
             $statusMsgClass = '';
             $statusMsg = '';
@@ -55,25 +59,26 @@ if(!empty($statusMsg)){
     echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
 }?>
 
-<h3>Ajout de données par fichier CSV</h3>
+<form action="../library/search.php" method="post">
+    <input type="search" name="query" id="query" placeholder="Entrez Nom ou ID">
+    <input type="submit" value="Rechercher">
+</form>
+
+<p>Ajout de données par fichier CSV</p>
 
 
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Members list
-        </div>
-        <div class="panel-body">
-            <form action="../library/import.php" method="POST" enctype="multipart/form-data">
-                <input type="file" name="csvfile">
-                <input type="submit" class="btn btn-primary" name="importSubmit" value="Envoyez">
-                <input type="reset" value="Annuler">
-            </form>
-        </div>
 
-        <div>
-        <table class="table table-bordered">
-            <thead class="thead-light">
+<div class="panel-heading">Members list</div>
+
+<form action="../library/import.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="csvfile">
+    <input type="submit" class="btn btn-primary" name="importSubmit" value="Envoyez">
+    <input type="reset" value="Annuler">
+</form>
+
+<div>
+    <table class="table table-bordered">
+        <thead class="thead-light">
             <tr>
                 <th scope="col">Nom</th>
                 <th scope="col">Prénom</th>
@@ -82,9 +87,9 @@ if(!empty($statusMsg)){
                 <th scope="col">Classe</th>
                 <th scope="col">Action</th>
             </tr>
-            </thead>
-            <tbody>
-            <?php
+        </thead>
+        <tbody>
+        <?php
             if(count($getlist) > 0):
                 foreach($getlist as $list) :
 
@@ -96,7 +101,7 @@ if(!empty($statusMsg)){
                         <td><?php echo $list['username']; ?></td>
                         <td><?php echo $list['email']; ?></td>
                         <td><?php echo $list['class']; ?></td>
-                        <td><a href="edit.php?id=<?php echo $list['id'];?>"><input type="submit" name="edit" class="btn btn-info" value="Modifier"></a>
+                        <td><a href="edit_user.php?id=<?php echo $list['id'];?>"><input type="submit" name="edit" class="btn btn-info" value="Modifier"></a>
                             <a href="../library/delete_profile.php?id=<?php echo $list['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
 
 
@@ -108,10 +113,9 @@ if(!empty($statusMsg)){
                     <td colspan="6">Aucune donnée actuellement enregistrée</td>
                 </tr>
             <?php endif ?>
-            </tbody>
-        </table>
-        </div>
-    </div>
-</div>
+        </tbody>
+</table>
+
+
 
 <a href="dashboard.php">Retour vers le dashboard</a>

@@ -3,13 +3,6 @@ require_once __DIR__ . '\..\pdo\connect_db.php';
 require_once __DIR__ . '\..\pdo\config.php';
 
 
-//$db = connect(
-//    DB_HOST,
-//    DB_NAME,
-//    DB_USER,
-//    DB_PWD
-//);
-
 /**Fonction récupérant le contenu de la base de données
  * @param mysqli $db
  * @return array
@@ -50,6 +43,7 @@ require_once __DIR__ . '\..\pdo\config.php';
      return $id;
  }
 
+
  function getList(PDO $db) {
 
      $data = [];
@@ -65,6 +59,19 @@ require_once __DIR__ . '\..\pdo\config.php';
      return $data;
  }
 
+ function getLastInfo(PDO $db){
+     $data = [];
+     $sql = $db->prepare("SELECT * FROM `news` ORDER BY id DESC");
+     $sql -> execute();
+     $count = $sql->rowCount();
+
+     if ($count > 0) {
+         while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+             $data[] = $row;
+         }
+     }
+     return $data;
+ }
 
 /**Insert des fichiers dans la base de données
  * @param PDO $db
@@ -104,6 +111,19 @@ function addUser(PDO $db, array $record) {
 
     return $db;
 }
+
+//function addInfo(PDO $db, array $record) {
+//    $sql = "INSERT INTO `news` (`title`, `text`) ";
+//    $sql .= "VALUES (:title,
+//            :text)";
+//
+//    $stmt = $db->prepare($sql);
+//    $stmt->bindParam(':title', $record['title'], PDO::PARAM_STR);
+//    $stmt->bindParam(':text', $record['text'], PDO::PARAM_STR);
+//    $stmt->execute();
+//
+//    return $db;
+//}
 
 
 /** Supprimer des élements de la table "files" par leur ID
@@ -156,6 +176,20 @@ function deleteProfile(PDO $db, $id){
         echo $e->getMessage();
     }
 }
+
+
+function deleteInfo(PDO $db, $id){
+    try {
+
+        $sql = $db-> prepare("DELETE FROM `news` WHERE id = :id");
+        $sql->bindParam(':id', $id);
+        $sql->execute();
+
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+}
+
 
 function isLoggedIn(){
     if (isset($_SESSION['login']) == true) {

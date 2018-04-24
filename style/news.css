@@ -1,0 +1,78 @@
+#r-google{
+    color: black;
+    font-size: medium;
+    background-color: orangered;
+
+}
+.google{
+    width: 540px;
+    margin: 150px auto;
+    height: auto;
+    margin-top: -120px;
+
+}
+span{
+    color: red;
+}
+.slider{
+    width: 517px;
+    overflow:hidden;
+    margin: 150px auto;
+    border: 5px solid orangered;
+    border-radius: 5px;
+
+}
+.slides{
+    width: calc(510px * 5);
+    animation: defilement 60s infinite;
+}
+.slide{
+    float: left;
+    max-width: 510px;
+    border: 10px solid white;
+    border-radius: 5px;
+}
+.slides:hover {
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused;
+    animation-play-state: paused;
+    cursor: pointer;
+}
+
+/*defilement des teextes*/
+@keyframes defilement {
+    0%{
+        transform: translateX(0); /*1er texte*/
+    }
+    10%{
+        transform: translateX(0); /*temps intermédiaire*/
+    }
+    20%{
+        transform: translateX(-530px); /*2e texte*/
+    }
+    30%{
+        transform: translateX(-530px); /*temps intermédiaire*/
+    }
+    40%{
+        transform: translateX(-1060px); /*3e texte*/
+    }
+    50%{
+        transform: translateX(-1060px); /*temps intermédiaire*/
+    }
+    60%{
+        transform: translateX(-1575px); /*4e texte*/
+    }
+    /*70%{
+        transform: translateX(-1575px); temps intermédiaire
+    }*/
+    80%{
+        transform: translateX(-20100px); /*5 texte*/
+    }
+    /*90%{
+        transform: translateX(-20100px); temps intermédiaire
+    }*/
+    100%{
+        transform: translateX(0); /*recommence au 1er texte*/
+    }
+}
