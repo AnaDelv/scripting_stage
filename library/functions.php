@@ -47,7 +47,7 @@ require_once __DIR__ . '\..\pdo\config.php';
  function getList(PDO $db) {
 
      $data = [];
-     $sql = $db->prepare("SELECT * FROM members");
+     $sql = $db->prepare("SELECT * FROM members ORDER BY lastname, firstname");
      $sql -> execute();
      $count = $sql->rowCount();
 

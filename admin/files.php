@@ -56,10 +56,53 @@ if(!empty($statusMsg)){
 }
 ?>
 
-<form action="../library/search.php" method="post">
+<form action="" method="post">
     <input type="search" name="file" id="file" placeholder="Entrez le nom d'un logiciel">
     <input type="submit" value="Rechercher">
 </form>
+
+
+<?php
+if (isset($_POST['file'])):
+    if(!empty($_POST['file'])) :
+        //suppression des caractères spéciaux
+        $query = htmlspecialchars($_POST['file']);
+        //si l'utilisateur a saisie quelque chose, on traite sa requete
+        $sql ="SELECT * FROM `files` WHERE name LIKE ? ORDER BY `name`";
+
+        $req = $db->prepare($sql);
+        $req->execute(array('%'.$query.'%'));
+        $count = $req->rowCount();
+
+        if($count >= 1):
+        echo "$count résultat(s) pour <strong>$query</strong><hr/>";?>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th>Nom</th>
+                <th>Lien</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+    <?php while($data = $req->fetch()){?>
+            <tbody>
+            <tr>
+                <td><?php echo $data['name']; ?></td>
+                <td><a href="<?php echo $data['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a>
+                <td><a href="../library/delete_file.php?id=<?php echo $data['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
+            </tr>
+            </tbody>
+        <?php }
+    else:
+        echo "aucun élément trouvé pour <strong>$query</strong><hr>";
+    endif;
+    endif;
+
+
+    endif;?>
+
+</table>
 
 
 <h2>Upload de fichiers</h2>

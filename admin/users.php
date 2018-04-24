@@ -61,14 +61,68 @@ if(!empty($_GET['status'])){
 
 if(!empty($statusMsg)){
     echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
-}?>
+}
+?>
 
-<form action="../library/search.php" method="post">
+<form action="" method="post">
     <input type="search" name="query" id="query" placeholder="Entrez Nom et/ou Prénom">
     <input type="submit" value="Rechercher">
 </form>
 
+<?php if (isset($_POST['query'])):
+
+    if(!empty($_POST['query'])) :
+
+        //suppression des caractères spéciaux
+        $query = htmlspecialchars($_POST['query']);
+        //si l'utilisateur a saisie quelque chose, on traite sa requete
+        $ql ="SELECT * FROM `members` WHERE lastname LIKE ? OR firstname LIKE ? ORDER BY lastname, firstname";
+
+        $req = $db->prepare($ql);
+        $req->execute(array('%'.$query.'%', '%'.$query.'%'));
+        $count = $req->rowCount();
+
+        if($count >= 1):
+            echo "$count résultat(s) pour <strong>$query</strong><hr/>";?>
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Identifiant</th>
+                    <th>E-mail</th>
+                    <th>Classe</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+            <?php while($data = $req->fetch()){
+                if($data['role'] != 'admin'):?>
+                <tbody>
+                <tr>
+                    <td><?php echo $data['lastname']; ?></td>
+                    <td><?php echo $data['firstname']; ?></td>
+                    <td><?php echo $data['username']; ?></td>
+                    <td><?php echo $data['email']; ?></td>
+                    <td><?php echo $data['class']; ?></td>
+                    <td><a href="edit_user.php?id=<?php echo $data['id'];?>"><input type="submit" name="edit" class="btn btn-info" value="Modifier"></a>
+                        <a href="../library/delete_profile.php?id=<?php echo $data['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
+                </tr>
+                </tbody>
+           <?php endif;}
+        else:
+            echo "aucun élément trouvé pour <strong>$query</strong><hr>";
+        endif;
+    endif;
+
+
+endif;?>
+
+</table>
 <p>Ajout de données par fichier CSV</p>
+
+
+
 
 
 
@@ -80,6 +134,14 @@ if(!empty($statusMsg)){
     <input type="reset" value="Annuler">
 </form>
 
+
+<form action="" method="post">
+    <input type="submit" class="btn btn-secondary" name="full_list" value="Voir tous" >
+</form>
+
+
+<?php if(isset($_POST['full_list'])): ?>
+
 <div>
     <table class="table table-bordered">
         <thead class="thead-light">
@@ -87,7 +149,7 @@ if(!empty($statusMsg)){
                 <th scope="col">Nom</th>
                 <th scope="col">Prénom</th>
                 <th scope="col">Identifiant</th>
-                <th scope="col">Email</th>
+                <th scope="col">E-mail</th>
                 <th scope="col">Classe</th>
                 <th scope="col">Action</th>
             </tr>
@@ -119,6 +181,7 @@ if(!empty($statusMsg)){
             <?php endif ?>
         </tbody>
 </table>
+<?php endif;?>
 
 
 
