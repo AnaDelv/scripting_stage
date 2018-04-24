@@ -23,27 +23,30 @@ $newUser = [
 
 if(isset($_POST['add'])) {
 
-    if($_POST['password'] == $_POST['repeatpassword']) {
+    if(!empty($_POST['lastname']) || !empty($_POST['firstname']) || !empty($_POST['username']) || !empty($_POST['password']) || !empty($_POST['repeatpassword']) || !empty($_POST['class'])) {
+        if($_POST['password'] == $_POST['repeatpassword']) {
 
-        $query = $db->prepare("SELECT lastname, firstname FROM `members` WHERE lastname= :lastname AND firstname=:firstname");
-        $query->bindParam(':lastname', $newUser['lastname']);
-        $query->bindParam(':firstname', $newUser['firstname']);
-        $query->execute();
+            $query = $db->prepare("SELECT lastname, firstname FROM `members` WHERE lastname= :lastname AND firstname=:firstname");
+            $query->bindParam(':lastname', $newUser['lastname']);
+            $query->bindParam(':firstname', $newUser['firstname']);
+            $query->execute();
 
-        $row = $query->rowCount();
+            $row = $query->rowCount();
 
-        if ($row > 0) {
+            if ($row > 0) {
 
-            $qstring = '?status=user';
-        } else {
-            echo "OK !";
+                $qstring = '?status=user';
+            } else {
             addUser($db, $newUser);
-            $qstring = '?status=succ';
+                $qstring = '?status=succ';
+            }
+        } else {
+            $qstring = '?status=wrong';
         }
     } else {
-        $qstring = '?status=wrong';
+        $qstring = '?status=field';
     }
-} else {
-    $qstring = '?status=field';
+
+
 }
 header('Location: ../admin/dashboard.php'.$qstring);

@@ -39,6 +39,10 @@ if(!empty($_GET['status'])){
             $statusMsgClass = 'alert-success';
             $statusMsg = 'Les données ont bien été supprimées.';
             break;
+        case 'empty':
+            $statusMsgClass = 'alert-danger';
+            $statusMsg = 'La zone de recherche est vide.';
+            break;
 
         case 'errdel':
             $statusMsgClass = 'alert-danger';
@@ -60,7 +64,7 @@ if(!empty($statusMsg)){
 }?>
 
 <form action="../library/search.php" method="post">
-    <input type="search" name="query" id="query" placeholder="Entrez Nom ou ID">
+    <input type="search" name="query" id="query" placeholder="Entrez Nom et/ou Prénom">
     <input type="submit" value="Rechercher">
 </form>
 

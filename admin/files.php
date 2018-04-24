@@ -37,6 +37,10 @@ if(!empty($_GET['status'])){
             $statusMsgClass = 'alert-danger';
             $statusMsg = "Une erreur est survenue lors de l'envoi";
             break;
+        case 'empty':
+            $statusMsgClass = 'alert-danger';
+            $statusMsg = "La zone de recherche est vide.";
+            break;
         case 'ext':
             $statusMsgClass = 'alert-danger';
             $statusMsg = 'Veuillez envoyer un fichier au format PDF';
@@ -51,6 +55,12 @@ if(!empty($statusMsg)){
     echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
 }
 ?>
+
+<form action="../library/search.php" method="post">
+    <input type="search" name="file" id="file" placeholder="Entrez le nom d'un logiciel">
+    <input type="submit" value="Rechercher">
+</form>
+
 
 <h2>Upload de fichiers</h2>
 

@@ -102,11 +102,11 @@ if(!empty($statusMsg)){
     </div>
     <div>
         <label for="pass_form">Mot de passe : </label>
-        <input type="text" id="pass_form" name="password" placeholder="Password">
+        <input type="password" id="pass_form" name="password" placeholder="Password">
     </div>
     <div>
         <label for="confpass_form">Confirmez le mot de passe : </label>
-        <input type="text" id="confpass_form" name="repeatpassword" placeholder="Confirm password">
+        <input type="password" id="confpass_form" name="repeatpassword" placeholder="Confirm password">
     </div>
     <div>
         <label for="class_form">Classe : </label>

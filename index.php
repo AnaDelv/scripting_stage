@@ -76,10 +76,10 @@ echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
         $retour= $db->prepare('SELECT * FROM `news` ORDER BY id DESC LIMIT 0, 3');
         $retour->execute();
 
-        while($donnees=$retour->fetch()){?>
+        while($donnees = $retour->fetch()){?>
             <div class="slide">
                 <span><?php echo date('d/m/Y', $donnees['date']).' -- INFOS : ';?></span>
-                <?php $contenu =nl2br(stripslashes($donnees['text']));
+                <?php $contenu = nl2br(stripslashes($donnees['text']));
                 echo  $contenu;
                 ?>
             </div>
