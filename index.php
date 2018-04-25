@@ -14,6 +14,10 @@ $db = connect(
     DB_USER,
     DB_PWD
 );
+
+
+
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -99,5 +103,41 @@ echo '<div class="alert '.$statusMsgClass.'">'.$statusMsg.'</div>';
         </div>
     </div>
 </div>
+
+<div class="container" id="prochainement">
+    Prochainement
+</div>
+
+<?php
+//on recupere les 3 dernières actualités
+$actu= $db->prepare('SELECT dateActualite, titre, texte FROM `actualite` ORDER BY id DESC LIMIT 0, 3');
+$actu->execute();?>
+<!-- on affiche les actualités dans des tableaux -->
+<div class="container">
+    <?php while ($prochainement=$actu->fetch()){?>
+        <table id="actu_table">
+            <tr class="table-light">
+                <th id="actu_date" rowspan="2">
+                    <?php echo $prochainement['dateActualite'];?>
+                </th>
+                <th id="actu_titre">
+                    <?php echo $prochainement['titre'];?>
+                </th>
+            <tr class="table-light">
+                <td class="table-light">  <?php echo $prochainement['texte'];?></td>
+
+            </tr>
+        </table>
+
+
+        <?php
+// fermeture de la boucle while
+    }
+
+    ?>
+</div>
+
+
+<?php require_once 'layout/footer.php'?>
 
 

@@ -73,6 +73,23 @@ require_once __DIR__ . '\..\pdo\config.php';
      return $data;
  }
 
+
+ function getInfo(PDO $db, $firstResult, $resultPerPages){
+     $result = $db->prepare("SELECT * FROM `news` ORDER BY id DESC LIMIT $firstResult , $resultPerPages");
+     $result->execute();
+     $data = $result->fetch(PDO::FETCH_ASSOC);
+     return $data;
+ }
+
+ function getNbPages(PDO $db){
+     $sql = $db->prepare("SELECT count(*) AS total FROM `news`");
+     $sql->execute();
+     $row = $sql->fetch(PDO::FETCH_ASSOC);
+     return $row['total'];
+ }
+
+
+
 /**Insert des fichiers dans la base de données
  * @param PDO $db
  * @param array $record

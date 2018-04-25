@@ -24,6 +24,20 @@ $db = connect(
 );
 
 $getlist = getList($db);
+$getTotal = getNbPages($db);
+$totalPages = ceil($getTotal/10);
+if(isset($_GET['page'])) {// Si la variable $_GET['page'] existe...
+    $page = intval($_GET['page']);
+
+    if($page > $totalPages) { // Si la valeur de $pageActuelle (le numéro de la page) est plus grande que $totalPages...
+        $page  = $totalPages;
+    }
+} else {// Sinon
+
+    $page = 1; // La page actuelle est la n°1
+}
+
+$firstResult = ($page - 1)*10; // On calcul la première entrée à lire
 
 if(!empty($_GET['status'])){
     switch($_GET['status']){
@@ -73,12 +87,15 @@ if(!empty($statusMsg)){
 
     if(!empty($_POST['query'])) :
 
+
+
+
         //suppression des caractères spéciaux
         $query = htmlspecialchars($_POST['query']);
         //si l'utilisateur a saisie quelque chose, on traite sa requete
-        $ql ="SELECT * FROM `members` WHERE lastname LIKE ? OR firstname LIKE ? ORDER BY lastname, firstname";
+        $sql ="SELECT * FROM `members` WHERE lastname LIKE ? OR firstname LIKE ? ORDER BY lastname, firstname LIMIT $firstResult, 10";
 
-        $req = $db->prepare($ql);
+        $req = $db->prepare($sql);
         $req->execute(array('%'.$query.'%', '%'.$query.'%'));
         $count = $req->rowCount();
 
@@ -112,13 +129,27 @@ if(!empty($statusMsg)){
            <?php endif;}
         else:
             echo "aucun élément trouvé pour <strong>$query</strong><hr>";
+        endif;?>
+        </table>
+<p align="center"> Page :
+
+    <?php for($i = 1; $i <= $totalPages; $i++) //On fait notre boucle
+    {
+        //On va faire notre condition
+        if($i == $page) :
+            echo ' [ '.$i.' ] ';
+        else: //Sinon...
+            echo ' <a href="users.php?page='.$i.'">'.$i.'</a> ';
         endif;
-    endif;
-
-
+    }?>
+</p>
+    <?php endif;
 endif;?>
 
-</table>
+
+
+
+
 <p>Ajout de données par fichier CSV</p>
 
 
@@ -135,54 +166,64 @@ endif;?>
 </form>
 
 
-<form action="" method="post">
-    <input type="submit" class="btn btn-secondary" name="full_list" value="Voir tous" >
-</form>
 
-
-<?php if(isset($_POST['full_list'])): ?>
-
-<div>
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Identifiant</th>
-                <th scope="col">E-mail</th>
-                <th scope="col">Classe</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-            if(count($getlist) > 0):
-                foreach($getlist as $list) :
-
-                    if($list['role'] != 'admin'):?>
-
-                    <tr>
-                        <td><?php echo $list['lastname']; ?></td>
-                        <td><?php echo $list['firstname']; ?></td>
-                        <td><?php echo $list['username']; ?></td>
-                        <td><?php echo $list['email']; ?></td>
-                        <td><?php echo $list['class']; ?></td>
-                        <td><a href="edit_user.php?id=<?php echo $list['id'];?>"><input type="submit" name="edit" class="btn btn-info" value="Modifier"></a>
-                            <a href="../library/delete_profile.php?id=<?php echo $list['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
-
-
-                    </tr>
-                    <?php endif;
-                endforeach;
-            else: ?>
+    <a href="#demo" class="btn btn-info" data-toggle="collapse">Voir tout</a>
+<div class="container">
+    <div id="demo" class="collapse">
+        <div>
+            <table class="table table-bordered">
+                <thead class="thead-light">
                 <tr>
-                    <td colspan="6">Aucune donnée actuellement enregistrée</td>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Identifiant</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Classe</th>
+                    <th scope="col">Action</th>
                 </tr>
-            <?php endif ?>
-        </tbody>
-</table>
-<?php endif;?>
+                </thead>
+                <tbody>
+                <?php
+                if(count($getlist) > 0):
+                    foreach($getlist as $list) :
+
+                        if($list['role'] != 'admin'):?>
+
+                            <tr>
+                                <td><?php echo $list['lastname']; ?></td>
+                                <td><?php echo $list['firstname']; ?></td>
+                                <td><?php echo $list['username']; ?></td>
+                                <td><?php echo $list['email']; ?></td>
+                                <td><?php echo $list['class']; ?></td>
+                                <td><a href="edit_user.php?id=<?php echo $list['id'];?>"><input type="submit" name="edit" class="btn btn-info" value="Modifier"></a>
+                                    <a href="../library/delete_profile.php?id=<?php echo $list['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
 
 
-
-<a href="dashboard.php">Retour vers le dashboard</a>
+                            </tr>
+                        <?php endif;
+                    endforeach;
+                else: ?>
+                    <tr>
+                        <td colspan="6">Aucune donnée actuellement enregistrée</td>
+                    </tr>
+                <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+        <p align="center"> Page :
+            <?php //Pour l'affichage, on centre la liste des pages
+            for($i = 1; $i <= $totalPages; $i++) //On fait notre boucle
+            {
+                //On va faire notre condition
+                if($i == $page) :
+                    echo ' [ '.$i.' ] ';
+                else: //Sinon...
+                    echo ' <a href="info.php?page='.$i.'">'.$i.'</a> ';
+                endif;
+            }?>
+        </p>
+    </div>
+</div>
+    <div>
+        <a href="dashboard.php">Retour vers le dashboard</a>
+    </div>

@@ -74,8 +74,13 @@ if(!empty($statusMsg)){
                 <input type="text" name="username" value="<?php echo $row['username'];?>">
                 <input type="password" name="password" placeholder="Password">
                 <input type="password" name="repeatpassword" placeholder="Confirm Password">
-                <input type="text" name="email" value="<?php echo $row['email'];?>">
-                <input type="text" name="class" value="<?php echo $row['class'];?>">
+                <input type="email" name="email" value="<?php echo $row['email'];?>">
+                <select name="class">
+                    <option><?php echo $row['class'];?></option>
+                    <option value="classe 1">Classe 1</option>
+                    <option value="classe 2">Classe 2</option>
+                    <option value="classe 3">Classe 3</option>
+                </select>
                 <input type="submit" class="btn btn-primary" name="edit" value="Envoyez">
                 <input type="reset" value="Annuler">
             </form>

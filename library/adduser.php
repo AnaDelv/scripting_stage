@@ -49,4 +49,4 @@ if(isset($_POST['add'])) {
 
 
 }
-header('Location: ../admin/dashboard.php'.$qstring);
+//header('Location: ../admin/dashboard.php'.$qstring);

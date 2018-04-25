@@ -46,38 +46,74 @@ if(!empty($statusMsg)){
 <h3>Informations</h3>
 
 <a href="dashboard.php">Ajouter une information</a>
+<?php
 
+
+$getTotal = getNbPages($db);
+$totalPages = ceil($getTotal/10);
+
+if(isset($_GET['page'])) {// Si la variable $_GET['page'] existe...
+    $page = intval($_GET['page']);
+
+    if($page > $totalPages) { // Si la valeur de $pageActuelle (le numéro de la page) est plus grande que $totalPages...
+        $page  = $totalPages;
+    }
+} else {// Sinon
+
+    $page = 1; // La page actuelle est la n°1
+}
+
+$firstResult = ($page - 1)*10; // On calcul la première entrée à lire
+
+// La requête sql pour récupérer les messages de la page actuelle.
+$result = $db->prepare("SELECT * FROM `news` ORDER BY id DESC LIMIT $firstResult , 10");
+$result->execute(); ?>
+
+<div class="container">
 <table class="table table-bordered">
-    <thead>
+    <thead class="thead-light">
     <tr>
-        <th>Date de parution</th>
+        <th>Date</th>
         <th>Titre</th>
-        <th>Message</th>
+        <th>Texte</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
+    <?php while($data = $result->fetch(PDO::FETCH_ASSOC)) {// On lit les entrées une à une grâce à une boucle
+        if(count($data) > 0) :?>
 
-    <?php if(count($getList) > 0):
-        foreach ($getList as $list): ?>
-    <tr>
-        <td><?php echo date('d/m/Y', $list['date']);?></td>
-        <td><?php echo stripslashes($list['title'])?></td>
-        <td><?php echo stripslashes($list['text'])?></td>
-        <td><a href="edit_info.php?id=<?php echo $list['id'];?>"><input type="submit" name="edit_info" class="btn btn-info" value="Modifier"></a>
-            <a href="../library/delete_info.php?id=<?php echo $list['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
-
-
-    </tr>
-
-
-
-    <?php endforeach;
-
-    else: ?>
         <tr>
-            <td colspan="4">Aucune information n'est actuellement enregistrée</td>
+            <td><?php echo date('d/m/Y', $data['date']) ?></td>
+            <td><?php echo stripslashes($data['title']) ?></td>
+            <td><?php echo stripslashes($data['text']) ?></td>
+            <td><a href="edit_info.php?id=<?php echo $data['id'];?>"><input type="submit" name="edit_info" class="btn btn-info" value="Modifier"></a>
+                <a href="../library/delete_info.php?id=<?php echo $data['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
+
         </tr>
-    <?php endif;?>
+
+        <?php else: ?>
+            <tr>
+                <td colspan="4">Aucune information n'est actuellement enregistrée</td>
+            </tr>
+        <?php endif;?>
+    <?php } ?>
+
     </tbody>
+
 </table>
+
+<p align="center"> Page :
+    <?php //Pour l'affichage, on centre la liste des pages
+    for($i = 1; $i <= $totalPages; $i++) //On fait notre boucle
+    {
+        //On va faire notre condition
+        if($i == $page) :
+            echo ' [ '.$i.' ] ';
+        else: //Sinon...
+            echo ' <a href="info.php?page='.$i.'">'.$i.'</a> ';
+        endif;
+    }?>
+</p>
+
+</div>

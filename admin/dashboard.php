@@ -110,7 +110,11 @@ if(!empty($statusMsg)){
     </div>
     <div>
         <label for="class_form">Classe : </label>
-        <input type="text" id="class_form" name="class" placeholder="Class">
+        <select name="class">
+            <option value="classe 1">Classe 1</option>
+            <option value="classe 2">Classe 2</option>
+            <option value="classe 3">Classe 3</option>
+        </select>
     </div>
     <input type="submit" name="add" value="Envoyez">
     <input type="reset" value="Annuler">
