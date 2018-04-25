@@ -67,7 +67,6 @@ if (isset($_POST['file'])):
             <tr>
                 <th>Nom</th>
                 <th>Lien</th>
-                <th>Action</th>
             </tr>
             </thead>
 
@@ -76,7 +75,6 @@ if (isset($_POST['file'])):
             <tr>
                 <td><?php echo $data['name']; ?></td>
                 <td><a href="<?php echo $data['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a>
-                <td><a href="../library/delete_file.php?id=<?php echo $data['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
             </tr>
             </tbody>
 
@@ -113,8 +111,6 @@ endif;?>
                     <thead class="thead-light">
                     <tr>
                         <th>Liste de fichiers uploadés</th>
-                        <th>Lien de téléchargement</th>
-                        <th>Supprimer fichier</th>
                     </tr>
 
                     </thead>
@@ -129,18 +125,13 @@ endif;?>
                                 <td><?php echo $record['name']; ?></td>
                                 <td><a href="<?php echo $record['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a>
                                 <td>
-
-
-                                    <a href="../library/delete_file.php?id=<?php echo $record['id'] ;?>
-                        " onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')" ><input type="submit" class="btn btn-danger" value="Supprimer"</a> </td>
-
                             </tr>
 
                         <?php endforeach;
 
                     else: ?>
                         <tr>
-                            <td colspan="3">Aucun fichier n'est actuellement uploadé</td>
+                            <td colspan="2">Aucun fichier n'est actuellement uploadé</td>
                         </tr>
                     <?php endif ?>
                     </tbody>
