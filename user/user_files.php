@@ -67,6 +67,9 @@ if (isset($_POST['file'])):
             <tr>
                 <th>Nom</th>
                 <th>Lien</th>
+                <?php if(isAdmin()) :?>
+                <th>Action</th>
+                <?php endif; ?>
             </tr>
             </thead>
 
@@ -75,6 +78,9 @@ if (isset($_POST['file'])):
             <tr>
                 <td><?php echo $data['name']; ?></td>
                 <td><a href="<?php echo $data['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a>
+                    <?php if(isAdmin()) :?>
+                <td><a href="../library/delete_file.php?id=<?php echo $data['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
+                <?php endif; ?>
             </tr>
             </tbody>
 
@@ -111,6 +117,10 @@ endif;?>
                     <thead class="thead-light">
                     <tr>
                         <th>Liste de fichiers uploadés</th>
+                        <th>Lien</th>
+                        <?php if(isAdmin()) :?>
+                            <th>Action</th>
+                        <?php endif; ?>
                     </tr>
 
                     </thead>
@@ -123,8 +133,10 @@ endif;?>
 
                             <tr>
                                 <td><?php echo $record['name']; ?></td>
-                                <td><a href="<?php echo $record['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a>
-                                <td>
+                                <td><a href="<?php echo $record['file_url']?>"><input type="submit" class="btn btn-success" value="Download"></a></td>
+                                <?php if(isAdmin()) :?>
+                                    <td><a href="../library/delete_file.php?id=<?php echo $record['id']; ?>" onclick="return confirm('Voulez-vous supprimer cet élément de la liste ?')"><input type="submit" class="btn btn-danger" value="Supprimer"></a></td>
+                                <?php endif; ?>
                             </tr>
 
                         <?php endforeach;

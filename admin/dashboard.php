@@ -65,7 +65,7 @@ if(!empty($statusMsg)){
 <h2>Ajouter information</h2>
 
 
-<form action="../library/addinfo.php" method="POST" enctype="multipart/form-data">
+<form action="../library/addinfo.php" method="POST" id="form" enctype="multipart/form-data">
     <div><label for="title">Titre</label>
         <input type="text" name="title" id="title">
     </div>
@@ -74,9 +74,10 @@ if(!empty($statusMsg)){
         <textarea id="text" name="text"></textarea>
     </div>
     <div>
-        <label for="choice1">Choice 1 <input id="choice1" type="checkbox"></label>
-        <label for="choice2">Choice 2 <input id="choice2" type="checkbox"></label>
-        <label for="choice3">Choice 3 <input id="choice3" type="checkbox"></label>
+        <label for="choice1">ND<input id="choice1" name="section[]" class="button" type="radio" value="ND"></label>
+        <label for="choice2">LP<input id="choice2" name="section[]" class="button" type="radio" value="LP"></label>
+        <label for="choice3">LG<input id="choice3" name="section[]" class="button" type="radio" value="LG"></label>
+
     </div>
     <input type="submit" name="addinfo" value="Envoyez">
     <input type="reset" value="Annuler">
@@ -120,5 +121,4 @@ if(!empty($statusMsg)){
     <input type="reset" value="Annuler">
 </form>
     <a href="users.php">Voir les utilisateurs</a>
-
 <?php require_once '../layout/footer.php'; ?>

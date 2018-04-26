@@ -14,16 +14,18 @@ $db = connect(
 if (isset($_POST['edit_info'])){
     $id = $_POST['id'];
     $title = htmlentities(addslashes(trim($_POST['title'])));
+    $date = time();
     $text = htmlentities(addslashes(trim($_POST['text'])));
+    $section = $_POST['section'];
 
-    if(!empty($title) || !empty($text)) {
+    if(!empty($title) || !empty($text) || !empty($section)) {
 
-        echo 'ok';
-
-        $sql = "UPDATE `news` SET title= :title, text= :text WHERE id= :id";
+        $sql = "UPDATE `news` SET title= :title, text= :text, etablissement=:etablissement, date=:date WHERE id= :id";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':title',$title);
         $stmt->bindParam(':text',$text);
+        $stmt->bindParam(':etablissement',$section[0]);
+        $stmt->bindParam(':date',$date);
         $stmt->bindParam(':id',$id);
         $stmt->execute();
 

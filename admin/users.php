@@ -80,15 +80,17 @@ if(!empty($statusMsg)){
 
 <form action="" method="post">
     <input type="search" name="query" id="query" placeholder="Entrez Nom et/ou Prénom">
+    <select name="search_mode">
+        <option value="name">Nom ou Prénom</option>
+        <option value="class">Classe</option>
+    </select>
     <input type="submit" value="Rechercher">
 </form>
 
 <?php if (isset($_POST['query'])):
-
-    if(!empty($_POST['query'])) :
-
-
-
+    $query = NULL;
+    $count = 0;
+    if(!empty($_POST['query']) && ($_POST['search_mode']) == "name") :
 
         //suppression des caractères spéciaux
         $query = htmlspecialchars($_POST['query']);
@@ -98,6 +100,21 @@ if(!empty($statusMsg)){
         $req = $db->prepare($sql);
         $req->execute(array('%'.$query.'%', '%'.$query.'%'));
         $count = $req->rowCount();
+
+    elseif (!empty($_POST['query']) && ($_POST['search_mode']) == "class") :
+
+        //suppression des caractères spéciaux
+        $query = htmlspecialchars($_POST['query']);
+        //si l'utilisateur a saisie quelque chose, on traite sa requete
+        $sql ="SELECT * FROM `members` WHERE lastname LIKE ? OR firstname LIKE ? ORDER BY class, lastname, firstname LIMIT $firstResult, 10";
+
+        $req = $db->prepare($sql);
+        $req->execute(array('%'.$query.'%', '%'.$query.'%'));
+        $count = $req->rowCount();
+     else:
+
+         echo '<div class="alert alert-danger">Le champ de recherche est vide !</div>';
+    endif;
 
         if($count >= 1):
             echo "$count résultat(s) pour <strong>$query</strong><hr/>";?>
@@ -143,7 +160,7 @@ if(!empty($statusMsg)){
         endif;
     }?>
 </p>
-    <?php endif;
+<?php
 endif;?>
 
 

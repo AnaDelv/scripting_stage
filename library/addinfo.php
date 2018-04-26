@@ -14,15 +14,18 @@ if(isset($_POST['addinfo'])) {
     $title = htmlentities(addslashes(trim($_POST['title'])));
     $text = htmlentities(addslashes(trim($_POST['text'])));
     $date = time();
+    $section = ($_POST['section']);
 
 
-    if(!empty($title) && !empty($text)) {
+    if(!empty($title) && !empty($text) && !empty($section)) {
 
         if(strlen($text) <= 280) {
-            $stmt = $db->prepare("INSERT INTO `news` (`title`, `text`, `date`) VALUES (:title,
-            :text, :timing) ");
+
+            $stmt = $db->prepare("INSERT INTO `news` (`title`, `text`, `etablissement`, `date`) VALUES (:title,
+            :text, :etablissement, :timing) ");
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':text', $text);
+            $stmt->bindParam(':etablissement', $section[0]);
             $stmt->bindParam(':timing', $date);
             $stmt->execute();
 
@@ -34,6 +37,5 @@ if(isset($_POST['addinfo'])) {
     } else {
     $qstring = '?status=field';
     }
-
 }
 header('Location: ../admin/dashboard.php'.$qstring);
